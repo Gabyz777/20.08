@@ -47,7 +47,9 @@ function App() {
                         }}>
                         Senai <span style={{ color: '#ea1d2c' }}>Delivery</span>
                     </h1>
+
                     <TagDesconto porcentagem="20" />
+
                 </div>
 
                 <div
@@ -60,7 +62,9 @@ function App() {
                     <span style={{ fontWeight: '600', color: '#374151', fontSize: '0.9rem' }}>
                         Status da Loja:
                     </span>
+
                     <Interruptor />
+
                 </div>
 
                 <ul
@@ -91,6 +95,7 @@ function App() {
                 </ul>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+
                     {bancoDeDados.map((item) => (
                         <ItemCardapio
                             key={item.id}
