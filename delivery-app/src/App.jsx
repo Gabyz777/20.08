@@ -1,7 +1,14 @@
 import ItemCardapio from './components/ItemCardapio';
 import TagDesconto from './components/TagDesconto';
+import Interruptor from './components/Interruptor';
 
 const categorias = ['Pizzas', 'Hambúrgueres', 'Bebidas', 'Sobremesas'];
+
+const bancoDeDados = [
+    { id: 1, nome: 'X-Bacon', descricao: 'Pão, hambúrguer 200g, bacon crocante.', preco: 28.9 },
+    { id: 2, nome: 'Batata Frita', descricao: 'Porção 400g com cheddar.', preco: 15.0 },
+    { id: 3, nome: 'Refrigerante Cola', descricao: 'Lata 350ml gelada.', preco: 6.0 },
+];
 
 function App() {
     return (
@@ -22,8 +29,7 @@ function App() {
                     backgroundColor: '#ffffff',
                     padding: '24px',
                     borderRadius: '24px',
-                    boxShadow:
-                        '0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01)',
+                    boxShadow: '0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01)',
                 }}>
                 <div
                     style={{
@@ -47,17 +53,31 @@ function App() {
                 <div
                     style={{
                         display: 'flex',
-                        gap: '8px',
-                        marginBottom: '24px',
-                        overflowX: 'auto',
-                        paddingBottom: '4px',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '20px',
                     }}>
-                    {categorias.map((cat, idx) => (
-                        <span
-                            key={idx}
+                    <span style={{ fontWeight: '600', color: '#374151', fontSize: '0.9rem' }}>
+                        Status da Loja:
+                    </span>
+                    <Interruptor />
+                </div>
+
+                <ul
+                    style={{
+                        display: 'flex',
+                        gap: '8px',
+                        listStyle: 'none',
+                        padding: 0,
+                        margin: '0 0 24px 0',
+                        overflowX: 'auto',
+                    }}>
+                    {categorias.map((categoria, i) => (
+                        <li
+                            key={i}
                             style={{
-                                backgroundColor: idx === 1 ? '#ea1d2c' : '#f3f4f6',
-                                color: idx === 1 ? '#ffffff' : '#6b7280',
+                                backgroundColor: i === 1 ? '#ea1d2c' : '#f3f4f6',
+                                color: i === 1 ? '#ffffff' : '#6b7280',
                                 padding: '8px 16px',
                                 borderRadius: '12px',
                                 fontSize: '0.85rem',
@@ -65,22 +85,20 @@ function App() {
                                 whiteSpace: 'nowrap',
                                 cursor: 'pointer',
                             }}>
-                            {cat}
-                        </span>
+                            {categoria}
+                        </li>
                     ))}
-                </div>
+                </ul>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <ItemCardapio
-                        nome="X-Bacon"
-                        descricao="Pão, hambúrguer 200g, bacon crocante."
-                        preco={28.9}
-                    />
-                    <ItemCardapio
-                        nome="Batata Frita"
-                        descricao="Porção 400g com cheddar e bacon."
-                        preco={15.0}
-                    />
+                    {bancoDeDados.map((item) => (
+                        <ItemCardapio
+                            key={item.id}
+                            nome={item.nome}
+                            descricao={item.descricao}
+                            preco={item.preco}
+                        />
+                    ))}
                 </div>
             </div>
         </div>
