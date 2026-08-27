@@ -2,17 +2,18 @@ function TagDesconto({ porcentagem }) {
     return (
         <div
             style={{
-                background: 'linear-gradient(135deg, #ff4757, #ea1d2c)',
-                color: '#ffffff',
-                fontWeight: '700',
-                fontSize: '0.75rem',
+                backgroundColor: '#fef2f2',
+                border: '1px solid #fee2e2',
+                color: '#dc2626',
                 padding: '6px 12px',
-                borderRadius: '20px',
-                boxShadow: '0 4px 10px rgba(234, 29, 44, 0.3)',
-                letterSpacing: '0.5px',
-                display: 'inline-block',
+                borderRadius: '100px',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
             }}>
-            🔥 {porcentagem}% OFF
+            <span>🔥</span> {porcentagem}% OFF
         </div>
     );
 }
