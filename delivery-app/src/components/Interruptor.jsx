@@ -1,4 +1,8 @@
-function Interruptor({ ligado, setLigado }) {
+import { useState } from 'react';
+
+function Interruptor() {
+    const [ligado, setLigado] = useState(false);
+
     return (
         <div
             style={{
