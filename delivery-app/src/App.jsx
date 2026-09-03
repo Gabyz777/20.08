@@ -1,13 +1,7 @@
-import { useState, useEffect } from 'react';
-import ItemCardapio from './components/ItemCardapio';
-import TagDesconto from './components/TagDesconto';
-import Interruptor from './components/Interruptor';
 
-const categorias = ['Destaques', 'Hambúrgueres', 'Pizzas', 'Bebidas', 'Sobremesas'];
+import ItemCardapio from './components/ItemCardapio';
 
 function App() {
-    const [itensNoCarrinho, setItensNoCarrinho] = useState(0);
-    const [totalCarrinho, setTotalCarrinho] = useState(0);
     const [cardapio, setCardapio] = useState([]);
 
     useEffect(() => {
