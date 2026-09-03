@@ -9,6 +9,13 @@ function App() {
     const [itensNoCarrinho, setItensNoCarrinho] = useState(0);
     const [totalCarrinho, setTotalCarrinho] = useState(0);
     const [cardapio, setCardapio] = useState([]);
+    const [ligado, setLigado] = useState(true);
+
+    // Estados adicionados para a lógica do app
+    const [categoriaAtiva, setCategoriaAtiva] = useState('Destaques');
+    const [endereco, setEndereco] = useState('');
+    const [modalAberto, setModalAberto] = useState(false);
+    const [mensagemModal, setMensagemModal] = useState('');
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -19,6 +26,7 @@ function App() {
                     descricao:
                         'Pão brioche, 2x smash 100g, cheddar fatiado e bacon artesanal crocante.',
                     preco: 35.0,
+                    categoria: 'Hambúrgueres',
                 },
                 {
                     id: 2,
@@ -26,13 +34,23 @@ function App() {
                     descricao:
                         'Massa artesanal de fermentação natural, molho de tomate, moçarela e calabresa.',
                     preco: 45.0,
+                    categoria: 'Pizzas',
                 },
                 {
                     id: 3,
                     nome: 'Suco de Laranja 500ml',
                     descricao: '100% natural, espremido na hora, sem adição de açúcar ou água.',
                     preco: 8.0,
+                    categoria: 'Bebidas',
                 },
+                {
+                    id: 4,
+                    nome: 'Brownie de Chocolate',
+                    descricao:
+                        'Brownie artesanal, feito com chocolate belga e servido com sorvete de baunilha.',
+                    preco: 12.0,
+                    categoria: 'Sobremesas',
+                }
             ]);
         }, 1500);
 
@@ -44,6 +62,31 @@ function App() {
         setTotalCarrinho((prev) => prev + preco);
     };
 
+    function finalizarCompra() {
+        if (itensNoCarrinho === 0) {
+            setMensagemModal('Coloque algo no carrinho!');
+            setModalAberto(true);
+            return;
+        }
+
+        if (endereco.trim() === '') {
+            setMensagemModal('Por favor, preencha o endereço de entrega!');
+            setModalAberto(true);
+            return;
+        }
+
+        setMensagemModal('Pedido realizado com sucesso!');
+        setModalAberto(true);
+        setItensNoCarrinho(0);
+        setTotalCarrinho(0);
+        setEndereco('');
+    }
+
+    const cardapioFiltrado =
+        categoriaAtiva === 'Destaques'
+            ? cardapio
+            : cardapio.filter((item) => item.categoria === categoriaAtiva);
+
     return (
         <div
             style={{
@@ -54,6 +97,57 @@ function App() {
                 fontFamily:
                     'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
             }}>
+            {modalAberto && (
+                <div
+                    style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(15, 23, 42, 0.6)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 100,
+                        backdropFilter: 'blur(4px)',
+                    }}>
+                    <div
+                        style={{
+                            backgroundColor: '#ffffff',
+                            padding: '24px 32px',
+                            borderRadius: '16px',
+                            textAlign: 'center',
+                            maxWidth: '400px',
+                            width: '90%',
+                            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+                        }}>
+                        <p
+                            style={{
+                                margin: '0 0 20px 0',
+                                fontSize: '1rem',
+                                fontWeight: 600,
+                                color: '#0f172a',
+                            }}>
+                            {mensagemModal}
+                        </p>
+                        <button
+                            onClick={() => setModalAberto(false)}
+                            style={{
+                                backgroundColor: '#ea1d2c',
+                                color: '#ffffff',
+                                border: 'none',
+                                padding: '10px 24px',
+                                borderRadius: '100px',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                            }}>
+                            OK
+                        </button>
+                    </div>
+                </div>
+            )}
+
             <div
                 style={{
                     maxWidth: '1200px',
@@ -72,7 +166,7 @@ function App() {
                     <div
                         style={{
                             display: 'flex',
-                            justifyContent: 'space-between', // Corrigido aqui
+                            justifyContent: 'space-between',
                             alignItems: 'center',
                             width: '100%',
                         }}>
@@ -108,7 +202,7 @@ function App() {
                             paddingTop: '12px',
                             borderTop: '1px solid #f8fafc',
                         }}>
-                        <Interruptor />
+                        <Interruptor ligado={ligado} onToggle={() => setLigado((prev) => !prev)} />
                     </div>
                 </header>
 
@@ -122,7 +216,7 @@ function App() {
                                 padding: '16px 24px',
                                 marginBottom: '24px',
                                 display: 'flex',
-                                justifyContent: 'space-between', // Corrigido aqui
+                                justifyContent: 'space-between',
                                 alignItems: 'center',
                                 gap: '16px',
                                 boxShadow: '0 10px 20px rgba(15, 23, 42, 0.15)',
@@ -181,31 +275,36 @@ function App() {
                                 margin: 0,
                                 overflowX: 'auto',
                             }}>
-                            {categorias.map((cat, idx) => (
-                                <li
-                                    key={idx}
-                                    style={{
-                                        backgroundColor: idx === 0 ? '#0f172a' : '#f8fafc',
-                                        color: idx === 0 ? '#ffffff' : '#64748b',
-                                        border:
-                                            idx === 0 ? '1px solid #0f172a' : '1px solid #e2e8f0',
-                                        padding: '10px 20px',
-                                        borderRadius: '100px',
-                                        fontSize: '0.9rem',
-                                        fontWeight: idx === 0 ? 600 : 500,
-                                        whiteSpace: 'nowrap',
-                                        cursor: 'default',
-                                    }}>
-                                    {cat}
-                                </li>
-                            ))}
+                            {categorias.map((cat, idx) => {
+                                const isAtiva = categoriaAtiva === cat;
+                                return (
+                                    <li
+                                        key={idx}
+                                        onClick={() => setCategoriaAtiva(cat)}
+                                        style={{
+                                            backgroundColor: isAtiva ? '#0f172a' : '#f8fafc',
+                                            color: isAtiva ? '#ffffff' : '#64748b',
+                                            border: isAtiva
+                                                ? '1px solid #0f172a'
+                                                : '1px solid #e2e8f0',
+                                            padding: '10px 20px',
+                                            borderRadius: '100px',
+                                            fontSize: '0.9rem',
+                                            fontWeight: isAtiva ? 600 : 500,
+                                            whiteSpace: 'nowrap',
+                                            cursor: 'pointer',
+                                        }}>
+                                        {cat}
+                                    </li>
+                                );
+                            })}
                         </ul>
                     </div>
 
                     <div
                         style={{
                             display: 'flex',
-                            justifyContent: 'space-between', // Corrigido aqui
+                            justifyContent: 'space-between',
                             alignItems: 'center',
                             gap: '16px',
                             marginBottom: '20px',
@@ -217,7 +316,9 @@ function App() {
                                 color: '#0f172a',
                                 margin: 0,
                             }}>
-                            Destaques do Cardápio
+                            {categoriaAtiva === 'Destaques'
+                                ? 'Destaques do Cardápio'
+                                : categoriaAtiva}
                         </h2>
                         <span
                             style={{
@@ -227,7 +328,7 @@ function App() {
                                 marginLeft: '12px',
                                 whiteSpace: 'nowrap',
                             }}>
-                            {cardapio.length} opções
+                            {cardapioFiltrado.length} opções
                         </span>
                     </div>
 
@@ -258,7 +359,7 @@ function App() {
                                 </p>
                             </div>
                         ) : (
-                            cardapio.map((item) => (
+                            cardapioFiltrado.map((item) => (
                                 <ItemCardapio
                                     key={item.id}
                                     nome={item.nome}
@@ -269,6 +370,57 @@ function App() {
                             ))
                         )}
                     </div>
+
+                    <section
+                        style={{
+                            marginTop: '40px',
+                            paddingTop: '24px',
+                            borderTop: '1px solid #f1f5f9',
+                        }}>
+                        <h2
+                            style={{
+                                fontSize: '0.8rem',
+                                fontWeight: 700,
+                                color: '#64748b',
+                                marginBottom: '12px',
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.05em',
+                            }}>
+                            Finalizar Pedido
+                        </h2>
+                        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                            <input
+                                type="text"
+                                placeholder="Rua e Número da Entrega"
+                                value={endereco}
+                                onChange={(e) => setEndereco(e.target.value)}
+                                style={{
+                                    flex: 1,
+                                    minWidth: '280px',
+                                    padding: '12px 16px',
+                                    borderRadius: '12px',
+                                    border: '1px solid #e2e8f0',
+                                    fontSize: '0.9rem',
+                                    outline: 'none',
+                                    fontFamily: 'inherit',
+                                }}
+                            />
+                            <button
+                                onClick={finalizarCompra}
+                                style={{
+                                    backgroundColor: '#ea1d2c',
+                                    color: '#ffffff',
+                                    border: 'none',
+                                    padding: '12px 24px',
+                                    borderRadius: '12px',
+                                    fontWeight: 700,
+                                    fontSize: '0.9rem',
+                                    cursor: 'pointer',
+                                }}>
+                                Finalizar Pedido
+                            </button>
+                        </div>
+                    </section>
                 </main>
             </div>
         </div>

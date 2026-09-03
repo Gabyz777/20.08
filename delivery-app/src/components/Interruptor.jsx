@@ -1,8 +1,4 @@
-import { useState } from 'react';
-
-function Interruptor() {
-    const [ligado, setLigado] = useState(true);
-
+function Interruptor({ ligado, setLigado }) {
     return (
         <div
             style={{
@@ -21,6 +17,7 @@ function Interruptor() {
                         display: 'inline-block',
                     }}
                 />
+
                 <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#334155' }}>
                     {ligado ? 'Restaurante Aberto' : 'Restaurante Fechado'}
                 </span>
