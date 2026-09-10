@@ -249,7 +249,7 @@ function App() {
                                     marginLeft: '16px',
                                     whiteSpace: 'nowrap',
                                 }}>
-                                Ver Sacola (R$ {totalCarrinho.toFixed(2).replace('.', ',')})
+                                Valor (R$ {totalCarrinho.toFixed(2).replace('.', ',')})
                             </span>
                         </div>
                     )}
